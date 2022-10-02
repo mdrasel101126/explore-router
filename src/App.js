@@ -6,6 +6,7 @@ import About from "./components/About/About";
 import Products from "./components/Products/Products";
 import Friends from "./components/Friends/Friends";
 import Main from "./Layout/Main";
+import FriendDetails from "./components/FriendDetails/FriendDetails";
 
 function App() {
   const router = createBrowserRouter([
@@ -22,18 +23,35 @@ function App() {
           element: <Home></Home>,
         },
         {
-          path: "/about",
-          element: <About></About>,
-        },
-        {
           path: "products",
           element: <Products></Products>,
+        },
+        {
+          path: "friends",
+          loader: async () => {
+            return fetch("https://jsonplaceholder.typicode.com/users");
+          },
+          element: <Friends></Friends>,
+        },
+        {
+          path: "/friend/:friendID",
+          loader: async (params) => {
+            console.log(params.params.friendID);
+            return fetch(
+              `https://jsonplaceholder.typicode.com/users/${params.params.friendID}`
+            );
+          },
+          element: <FriendDetails></FriendDetails>,
         },
       ],
     },
     {
-      path: "friends",
-      element: <Friends></Friends>,
+      path: "/about",
+      element: <About></About>,
+    },
+    {
+      path: "*",
+      element: <div>Sorry Page Not Found 404!!</div>,
     },
   ]);
   return (
